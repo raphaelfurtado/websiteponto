@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('page_title', 'Editar Projeto')
 
-@section('admin_content')
+@section('content')
     <div class="max-w-4xl bg-white p-10 rounded-3xl shadow-sm border border-gray-100">
         <form action="{{ route('admin.projects.update', $project) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -49,14 +49,52 @@
                 </div>
 
                 <div class="col-span-full space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-widest text-gray-400">Link do Projeto ao Vivo
+                        (Acessar Projeto)</label>
+                    <input type="url" name="project_url" value="{{ $project->project_url }}" placeholder="https://..."
+                        class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="col-span-full space-y-2">
                     <label class="text-xs font-bold uppercase tracking-widest text-gray-400">Thumbnail (Imagem
                         Principal)</label>
                     <input type="file" name="thumbnail_file" class="w-full">
                     @if($project->thumbnail)
-                        <div class="mt-2 w-32 h-20 rounded overflow-hidden border">
-                            <img src="{{ Str::startsWith($project->thumbnail, 'http') ? $project->thumbnail : asset('storage/' . $project->thumbnail) }}"
-                                class="w-full h-full object-cover">
+                        <div class="mt-2 w-32 h-20 rounded overflow-hidden border border-gray-200">
+                            <img src="{{ asset('storage/' . $project->thumbnail) }}" class="w-full h-full object-cover">
                         </div>
+                    @endif
+                </div>
+
+                <div class="col-span-full space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-widest text-gray-400">Galeria (Até 3 imagens para
+                        "Visualização do Sistema")</label>
+                    <input type="file" name="gallery_files[]" multiple max="3" class="w-full">
+                    <p class="text-[10px] text-gray-400 italic">Selecione novas imagens para adicionar à galeria (máximo 3
+                        no total).</p>
+                    @if($project->images && count($project->images) > 0)
+                        <div class="flex flex-wrap gap-4 mt-4">
+                            @foreach($project->images as $index => $img)
+                                <div class="relative group">
+                                    <div class="w-32 h-24 rounded-lg overflow-hidden border-2 border-gray-200">
+                                        <img src="{{ asset('storage/' . $img) }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <label class="absolute -top-2 -right-2 cursor-pointer">
+                                        <input type="checkbox" name="delete_images[]" value="{{ $index }}" class="hidden peer"
+                                            onchange="this.parentElement.parentElement.classList.toggle('opacity-50')">
+                                        <div
+                                            class="w-7 h-7 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg peer-checked:bg-red-700">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </div>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        <p class="text-[10px] text-amber-600 italic mt-2">Clique no X vermelho para marcar imagens para
+                            exclusão.</p>
                     @endif
                 </div>
 

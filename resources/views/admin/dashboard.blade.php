@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('page_title', 'Dashboard')
 
-@section('admin_content')
+@section('content')
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
             <span class="text-xs font-bold uppercase tracking-widest text-gray-400 block mb-2">Total de Projetos</span>

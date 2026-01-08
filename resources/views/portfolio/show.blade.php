@@ -22,19 +22,22 @@
                         <span class="text-xs font-bold text-primary tracking-wider uppercase">Projeto Destaque</span>
                     </div>
                     <h1 class="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight font-display">
-                        {{ $project->title }}</h1>
+                        {{ $project->title }}
+                    </h1>
                     <p class="text-xl text-slate-400 mb-12 leading-relaxed">{{ $project->subtitle }}</p>
 
                     <div class="flex flex-wrap gap-4 mb-16">
-                        <a href="#"
-                            class="bg-primary hover:bg-blue-600 text-white px-8 py-4 rounded-full font-bold transition-all flex items-center shadow-[0_0_20px_rgba(37,99,235,0.3)]">
-                            Acessar Projeto ao Vivo
-                            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                        </a>
-                        <a href="#"
+                        @if($project->project_url)
+                            <a href="{{ $project->project_url }}" target="_blank"
+                                class="bg-primary hover:bg-blue-600 text-white px-8 py-4 rounded-full font-bold transition-all flex items-center shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                                Acessar Projeto ao Vivo
+                                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        @endif
+                        <a href="#challenge"
                             class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-full font-bold transition-all flex items-center">
                             Ver Case Study
                             <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +74,7 @@
 
                 <div class="lg:w-1/2">
                     <div class="rounded-3xl overflow-hidden shadow-2xl border border-white/5 bg-slate-900/50 p-2">
-                        <img src="{{ $project->thumbnail ?? 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200' }}"
+                        <img src="{{ $project->thumbnail ? asset('storage/' . $project->thumbnail) : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200' }}"
                             alt="{{ $project->title }}" class="w-full h-auto rounded-2xl">
                     </div>
                 </div>
@@ -80,14 +83,15 @@
     </section>
 
     <!-- Challenge & Solution -->
-    <section class="py-32 bg-slate-950">
+    <section id="challenge" class="py-32 bg-slate-950">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
                 <div>
                     <div class="mb-16">
                         <span class="text-primary font-bold uppercase tracking-widest text-xs mb-4 block">O Desafio</span>
                         <h2 class="text-4xl font-bold text-white mb-8 font-display">
-                            {{ $project->title_challenge ?? 'Transformar problemas em soluções.' }}</h2>
+                            {{ $project->title_challenge ?? 'Transformar problemas em soluções.' }}
+                        </h2>
                         <p class="text-slate-400 leading-relaxed text-lg">{{ $project->challenge }}</p>
                     </div>
 
@@ -136,22 +140,60 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @php
-                    $gallery = json_decode($project->images ?? '[]') ?: [
+                    $gallery = $project->images ?: [
                         'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
                         'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
                         'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800'
                     ];
                 @endphp
 
-                @foreach($gallery as $img)
-                    <div
-                        class="rounded-3xl overflow-hidden border border-white/5 shadow-xl transition-transform hover:scale-[1.02]">
-                        <img src="{{ $img }}" alt="Tela do Sistema" class="w-full h-auto">
+                @foreach($gallery as $index => $img)
+                    <div class="group cursor-pointer"
+                        onclick="openImageModal('{{ Str::startsWith($img, 'http') ? $img : asset('storage/' . $img) }}')">
+                        <div
+                            class="rounded-2xl overflow-hidden border-2 border-white/10 shadow-xl transition-all hover:scale-[1.02] hover:border-primary/50 bg-slate-900/50 p-4">
+                            <img src="{{ Str::startsWith($img, 'http') ? $img : asset('storage/' . $img) }}"
+                                alt="Tela do Sistema {{ $index + 1 }}" class="w-full h-auto rounded-lg">
+                        </div>
+                        <p class="text-center text-xs text-slate-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            Clique para ampliar</p>
                     </div>
                 @endforeach
             </div>
         </div>
     </section>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+        onclick="closeImageModal()">
+        <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-primary transition-colors">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <img id="modalImage" src="" alt="Visualização" class="max-w-full max-h-full rounded-2xl shadow-2xl"
+            onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        function openImageModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    </script>
 
     <!-- Next Project CTA -->
     <section class="py-32 border-t border-white/5 bg-slate-900/20">

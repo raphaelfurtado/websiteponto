@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('page_title', 'Editar Serviço')
 
-@section('admin_content')
+@section('content')
     <div class="max-w-4xl bg-white p-10 rounded-3xl shadow-sm border border-gray-100">
         <form action="{{ route('admin.services.update', $service) }}" method="POST">
             @csrf

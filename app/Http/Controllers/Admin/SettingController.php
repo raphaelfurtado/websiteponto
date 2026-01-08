@@ -22,6 +22,7 @@ class SettingController extends Controller
             'footer_description' => 'nullable|string',
             'contact_email' => 'nullable|email',
             'contact_phone' => 'nullable|string',
+            'contact_address' => 'nullable|string',
             'site_logo' => 'nullable|image|max:2048',
             'site_favicon' => 'nullable|image|max:1024',
         ]);

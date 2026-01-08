@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('page_title', 'Novo Projeto')
 
-@section('admin_content')
+@section('content')
     <div class="max-w-4xl bg-white p-10 rounded-3xl shadow-sm border border-gray-100">
         <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -47,9 +47,23 @@
                 </div>
 
                 <div class="col-span-full space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-widest text-gray-400">Link do Projeto ao Vivo
+                        (Acessar Projeto)</label>
+                    <input type="url" name="project_url" placeholder="https://..."
+                        class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="col-span-full space-y-2">
                     <label class="text-xs font-bold uppercase tracking-widest text-gray-400">Thumbnail (Imagem
                         Principal)</label>
                     <input type="file" name="thumbnail_file" class="w-full">
+                </div>
+
+                <div class="col-span-full space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-widest text-gray-400">Galeria (Até 3 imagens para
+                        "Visualização do Sistema")</label>
+                    <input type="file" name="gallery_files[]" multiple max="3" class="w-full">
+                    <p class="text-[10px] text-gray-400 italic">Selecione até 3 imagens.</p>
                 </div>
 
                 <div class="flex items-center space-x-2">

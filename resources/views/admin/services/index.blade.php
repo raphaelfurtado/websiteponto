@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('page_title', 'Lista de Serviços')
 
-@section('admin_content')
+@section('content')
     <div class="mb-8 flex justify-between items-center">
         <p class="text-gray-500">Gerencie os serviços oferecidos.</p>
         <a href="{{ route('admin.services.create') }}"

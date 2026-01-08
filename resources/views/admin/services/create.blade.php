@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('page_title', 'Novo Serviço')
 
-@section('admin_content')
+@section('content')
     <div class="max-w-4xl bg-white p-10 rounded-3xl shadow-sm border border-gray-100">
         <form action="{{ route('admin.services.store') }}" method="POST">
             @csrf

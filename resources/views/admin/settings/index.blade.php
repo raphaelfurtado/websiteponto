@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('page_title', 'Configurações')
 
-@section('admin_content')
+@section('content')
     <div class="max-w-4xl bg-white p-10 rounded-3xl shadow-sm border border-gray-100">
         <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -57,6 +57,13 @@
                             value="{{ $settings['contact_phone'] ?? '(11) 99999-8888' }}"
                             class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500">
                     </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-widest text-gray-400">Endereço Comercial</label>
+                    <input type="text" name="contact_address"
+                        value="{{ $settings['contact_address'] ?? 'Av. Paulista, 1000 - São Paulo, SP' }}"
+                        class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500">
                 </div>
             </div>
 

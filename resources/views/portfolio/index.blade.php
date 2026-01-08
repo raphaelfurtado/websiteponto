@@ -9,7 +9,8 @@
                 <span class="text-primary font-bold uppercase tracking-widest text-xs mb-4 block">Portfólio
                     Selecionado</span>
                 <h1 class="text-4xl md:text-6xl font-bold text-white mb-8 font-display">Transformando ideias complexas em
-                    <span class="text-gradient">sistemas robustos</span>.</h1>
+                    <span class="text-gradient">sistemas robustos</span>.
+                </h1>
                 <p class="text-xl text-slate-400">Confira uma seleção dos nossos projetos mais recentes, desenvolvidos com
                     foco em performance, escalabilidade e experiência do usuário.</p>
             </div>
@@ -19,7 +20,7 @@
                     <a href="{{ route('portfolio.show', $project->slug) }}"
                         class="group block relative overflow-hidden rounded-[2.5rem] bg-slate-900 border border-white/5 transition-all duration-500 hover:border-primary/50">
                         <div class="aspect-video overflow-hidden">
-                            <img src="{{ $project->thumbnail ?? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800' }}"
+                            <img src="{{ $project->thumbnail ? (Str::startsWith($project->thumbnail, 'http') ? $project->thumbnail : asset('storage/' . $project->thumbnail)) : 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800' }}"
                                 alt="{{ $project->title }}"
                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <div

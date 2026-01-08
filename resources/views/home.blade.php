@@ -111,6 +111,55 @@
         </div>
     </section>
 
+    <!-- Featured Projects -->
+    <section id="portfolio" class="py-32 bg-slate-950/50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="max-w-2xl">
+                    <span class="text-primary font-bold uppercase tracking-widest text-xs mb-4 block">Portfólio em Destaque</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 font-display">Projetos que definem o <span class="text-gradient">padrão</span>.</h2>
+                    <p class="text-slate-400">Uma seleção de sistemas e sites que entregamos recentemente, focados em resultados reais para nossos clientes.</p>
+                </div>
+                <a href="{{ route('portfolio.index') }}" class="group inline-flex items-center text-white font-bold hover:text-primary transition-colors">
+                    Ver Portfólio Completo
+                    <svg class="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @forelse($featuredProjects as $project)
+                <a href="{{ route('portfolio.show', $project->slug) }}" class="group block relative overflow-hidden rounded-3xl bg-slate-900 border border-white/5 transition-all duration-500 hover:border-primary/50">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="{{ $project->thumbnail ? (Str::startsWith($project->thumbnail, 'http') ? $project->thumbnail : asset('storage/' . $project->thumbnail)) : 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800' }}" alt="{{ $project->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-8">
+                        <span class="inline-block bg-primary/20 backdrop-blur-md border border-primary/30 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">{{ $project->client }}</span>
+                        <h3 class="text-xl font-bold text-white mb-2">{{ $project->title }}</h3>
+                        <div class="flex items-center text-primary font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Ver Detalhes</span>
+                            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+                @empty
+                    @for($i=1; $i<=3; $i++)
+                    <div class="block relative overflow-hidden rounded-3xl bg-slate-900 border border-white/5 opacity-50 grayscale">
+                        <div class="aspect-[4/3] bg-slate-800"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8">
+                            <h3 class="text-xl font-bold text-white mb-2">Novo Projeto em Breve</h3>
+                        </div>
+                    </div>
+                    @endfor
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     <!-- Services Section -->
     <section id="servicos" class="py-32">
         <div class="container mx-auto px-6 text-center mb-20">
@@ -121,50 +170,35 @@
 
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service Card 1 -->
+                @forelse($services as $service)
                 <div
                     class="group bg-slate-900/50 border border-white/5 p-10 rounded-3xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-2">
                     <div
                         class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
+                        @if($service->icon_svg)
+                            {!! $service->icon_svg !!}
+                        @else
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        @endif
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Desenvolvimento Web</h3>
-                    <p class="text-slate-400 leading-relaxed">Landing pages de alta conversão e sites institucionais
-                        modernos, otimizados para SEO e mobile-first.</p>
+                    <h3 class="text-2xl font-bold text-white mb-4">{{ $service->title }}</h3>
+                    <p class="text-slate-400 leading-relaxed">{{ $service->description }}</p>
                 </div>
-
-                <!-- Service Card 2 -->
-                <div
-                    class="group bg-slate-900/50 border border-white/5 p-10 rounded-3xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-2">
-                    <div
-                        class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
+                @empty
+                    <!-- Fallback static services if none in DB -->
+                    <div class="group bg-slate-900/50 border border-white/5 p-10 rounded-3xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Desenvolvimento Web</h3>
+                        <p class="text-slate-400 leading-relaxed">Landing pages de alta conversão e sites institucionais modernos.</p>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Sistemas Personalizados</h3>
-                    <p class="text-slate-400 leading-relaxed">Dashboards administrativos, plataformas SaaS e ferramentas
-                        internas desenvolvidas sob medida para sua regra de negócio.</p>
-                </div>
-
-                <!-- Service Card 3 -->
-                <div
-                    class="group bg-slate-900/50 border border-white/5 p-10 rounded-3xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-2">
-                    <div
-                        class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Consultoria Tech</h3>
-                    <p class="text-slate-400 leading-relaxed">Refatoração de código legado, otimização de performance e
-                        consultoria em arquitetura de software escalável.</p>
-                </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -276,7 +310,8 @@
                                 </div>
                                 <div>
                                     <span class="block text-white font-bold">E-mail</span>
-                                    <span class="text-white/70">contato@websiteponto.com.br</span>
+                                    <span class="text-white/70">{{ $siteSettings['contact_email'] ??
+                                        'contato@websiteponto.com.br' }}</span>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-4">
@@ -288,7 +323,8 @@
                                 </div>
                                 <div>
                                     <span class="block text-white font-bold">Telefone</span>
-                                    <span class="text-white/70">(11) 99999-8888</span>
+                                    <span
+                                        class="text-white/70">{{ $siteSettings['contact_phone'] ?? '(11) 99999-8888' }}</span>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-4">
@@ -302,7 +338,8 @@
                                 </div>
                                 <div>
                                     <span class="block text-white font-bold">Localização</span>
-                                    <span class="text-white/70">São Paulo, SP - Brasil</span>
+                                    <span
+                                        class="text-white/70">{{ $siteSettings['contact_address'] ?? 'São Paulo, SP - Brasil' }}</span>
                                 </div>
                             </div>
                         </div>
