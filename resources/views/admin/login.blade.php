@@ -34,10 +34,6 @@
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all">Entrar
                 no Painel</button>
         </form>
-
-        <p class="text-center text-gray-500 mt-8 text-xs italic">
-            admin@admin.com / admin123
-        </p>
     </div>
 </body>
 
